@@ -40,6 +40,7 @@ ext.maxHeapSize = '-Xmx1500m' // default is 1.5G, but could be changed via comma
 
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
     }
@@ -67,7 +68,7 @@ if (project.hasProperty('useMavenLocal')) {
 
 repositories {
 
-//    mavenLocal()
+    mavenLocal()
     jcenter()
 
     mavenCentral()
@@ -239,7 +240,7 @@ configurations.all {
  */
 task runMain() {
     doLast {
-        addJvmArgIfEmpty "database.dir", getDatabaseDir("database")
+//        addJvmArgIfEmpty "database.dir", getDatabaseDir("database")
         addJvmArgIfEmpty "sync.fast.enabled", "true"
         addJvmArgIfEmpty "sync.fast.skipHistory", "true"
         addJvmArgIfEmpty "ethereumj.conf.res", "ethereumj.conf"
@@ -277,9 +278,9 @@ task runCustom() {
         def newArgs = []
         newArgs.add('-DnetworkProfile=custom')
 
-        if (System.getProperty('ethereumj.conf.file') == null) {
-            addJvmArgIfEmpty "database.dir", getDatabaseDir("database-custom")
-        }
+//        if (System.getProperty('ethereumj.conf.file') == null) {
+//            addJvmArgIfEmpty "database.dir", getDatabaseDir("database-custom")
+//        }
 
         // set heap size configure in task
         if (!project.hasProperty('jvmArgs') || project.jvmArgs.indexOf('-Xmx') == -1) {
@@ -298,13 +299,14 @@ task runCustom() {
 }
 
 def getDatabaseDir(String name) {
-    return System.getProperty("user.home") + "/ethereumj/" + name
+//    return System.getProperty("user.home") + "/ethereumj/" + name
+    return "database"
 }
 
 def bootRunWithNetworkConfig(String name, boolean includePresets) {
     def newArgs = []
     if (includePresets) {
-        addJvmArgIfEmpty "database.dir", getDatabaseDir("database-" + name)
+//        addJvmArgIfEmpty "database.dir", getDatabaseDir("database-" + name)
         newArgs.addAll([
                 '-Dethereumj.conf.res=' + name + '.conf',
                 '-Ddatabase.name=database-' + name,
