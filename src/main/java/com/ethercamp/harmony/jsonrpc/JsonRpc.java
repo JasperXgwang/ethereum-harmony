@@ -243,6 +243,9 @@ public interface JsonRpc {
     String eth_getCode(String addr, String bnOrId)throws Exception;
     String eth_sign(String addr, String data) throws Exception;
     String eth_sendTransaction(CallArguments transactionArgs) throws Exception;
+    // TODO: Remove, obsolete with this params
+    String eth_sendTransactionArgs(String from, String to, String gas,
+                                   String gasPrice, String value, String data, String nonce) throws Exception;
     String eth_sendRawTransaction(String rawData) throws Exception;
     String eth_call(CallArguments args, String bnOrId) throws Exception;
     String eth_estimateGas(CallArguments args) throws Exception;

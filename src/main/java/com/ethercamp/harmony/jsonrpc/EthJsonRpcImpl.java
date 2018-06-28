@@ -545,6 +545,15 @@ public class EthJsonRpcImpl implements JsonRpc {
                 new byte[] {signature.v});
     }
 
+    public String eth_sendTransactionArgs(String from, String to, String gas,
+                                          String gasPrice, String value, String data, String nonce) throws Exception {
+
+        final Account account = getAccountFromKeystore(from);
+
+        return sendTransaction(new CallArguments(from, to, gas, gasPrice, value, data, nonce), account);
+    }
+
+
     public String eth_sendTransaction(CallArguments args) throws Exception {
         Account account = getAccountFromKeystore(jsonHexToHex(args.from));
 
