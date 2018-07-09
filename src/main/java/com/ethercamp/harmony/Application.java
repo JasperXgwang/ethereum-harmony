@@ -42,6 +42,9 @@ public class Application {
      * Does one of:
      * - start Harmony peer;
      * - perform action and exit on completion.
+     *
+     * vm option
+     * -Dethereumj.conf.res=private.conf -Ddatabase.name=database-private -DnetworkProfile=private
      */
     public static void main(String[] args) throws Exception {
         // Overriding mine.start to get control of its startup
