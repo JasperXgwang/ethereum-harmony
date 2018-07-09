@@ -369,6 +369,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return walletService.importPersonal(key, password);
     }
 
+    @Override
     public String web3_clientVersion() {
         Pattern shortVersion = Pattern.compile("(\\d\\.\\d).*");
         Matcher matcher = shortVersion.matcher(System.getProperty("java.version"));
@@ -382,6 +383,7 @@ public class EthJsonRpcImpl implements JsonRpc {
                 .collect(Collectors.joining("/"));
     }
 
+    @Override
     public String web3_sha3(String data) throws Exception {
         byte[] result = HashUtil.sha3(TypeConverter.hexToByteArray(data));
         return TypeConverter.toJsonHex(result);
@@ -390,19 +392,23 @@ public class EthJsonRpcImpl implements JsonRpc {
     /**
      * Returns the current network id.
      */
+    @Override
     public String net_version() {
         return String.valueOf(config.networkId());
     }
 
+    @Override
     public String net_peerCount(){
         int size = channelManager.getActivePeers().size();
         return TypeConverter.toJsonHex(size);
     }
 
+    @Override
     public boolean net_listening() {
         return peerServer.isListening();
     }
 
+    @Override
     public String eth_protocolVersion(){
         return configCapabilities.getConfigCapabilities().stream()
                 .filter(Capability::isEth)
@@ -411,6 +417,7 @@ public class EthJsonRpcImpl implements JsonRpc {
                 .toString();
     }
 
+    @Override
     public Object eth_syncing() {
         if (!config.isSyncEnabled()) {
             return false;
@@ -423,14 +430,17 @@ public class EthJsonRpcImpl implements JsonRpc {
         }
     }
 
+    @Override
     public String eth_coinbase() {
         return toJsonHex(blockchain.getMinerCoinbase());
     }
 
+    @Override
     public boolean eth_mining() {
         return blockMiner.isMining();
     }
 
+    @Override
     public String eth_hashrate() {
         if (!blockMiner.isMining()) {
             return null;
@@ -439,18 +449,22 @@ public class EthJsonRpcImpl implements JsonRpc {
         }
     }
 
+    @Override
     public String eth_gasPrice(){
         return TypeConverter.toJsonHex(blockchainInfoService.getRecommendedGasPrice());
     }
 
+    @Override
     public String[] eth_accounts() {
         return personal_listAccounts();
     }
 
+    @Override
     public String eth_blockNumber() {
         return TypeConverter.toJsonHex(blockchain.getBestBlock().getNumber());
     }
 
+    @Override
     public String eth_getBalance(String address, String blockId) throws Exception {
         Objects.requireNonNull(address, "address is required");
         blockId = blockId == null ? BLOCK_LATEST : blockId;
@@ -460,6 +474,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return TypeConverter.toJsonHex(balance);
     }
 
+    @Override
     public String eth_getLastBalance(String address) throws Exception {
         return eth_getBalance(address, BLOCK_LATEST);
     }
@@ -479,6 +494,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return TypeConverter.toJsonHex(nonce);
     }
 
+    @Override
     public String eth_getBlockTransactionCountByHash(String blockHash) throws Exception {
         Block b = getBlockByJSonHash(blockHash);
         if (b == null) return null;
@@ -486,6 +502,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return TypeConverter.toJsonHex(n);
     }
 
+    @Override
     public String eth_getBlockTransactionCountByNumber(String bnOrId) throws Exception {
         List<Transaction> list = getTransactionsByJsonBlockId(bnOrId);
         if (list == null) return null;
@@ -493,6 +510,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return TypeConverter.toJsonHex(n);
     }
 
+    @Override
     public String eth_getUncleCountByBlockHash(String blockHash) throws Exception {
         Block b = getBlockByJSonHash(blockHash);
         if (b == null) return null;
@@ -500,6 +518,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return TypeConverter.toJsonHex(n);
     }
 
+    @Override
     public String eth_getUncleCountByBlockNumber(String bnOrId) throws Exception {
         Block b = getByJsonBlockId(bnOrId);
         if (b == null) return null;
@@ -507,6 +526,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return TypeConverter.toJsonHex(n);
     }
 
+    @Override
     public String eth_getCode(String address, String blockId) throws Exception {
         byte[] addressAsByteArray = TypeConverter.hexToByteArray(address);
         byte[] code = getRepoByJsonBlockId(blockId).getCode(addressAsByteArray);
@@ -524,6 +544,7 @@ public class EthJsonRpcImpl implements JsonRpc {
      * @return ECDSA signature (in hex)
      * @throws Exception
      */
+    @Override
     public String eth_sign(String address, String msg) throws Exception {
         String ha = jsonHexToHex(address);
         Account account = getAccountFromKeystore(ha);
@@ -545,6 +566,7 @@ public class EthJsonRpcImpl implements JsonRpc {
                 new byte[] {signature.v});
     }
 
+    @Override
     public String eth_sendTransactionArgs(String from, String to, String gas,
                                           String gasPrice, String value, String data, String nonce) throws Exception {
 
@@ -554,6 +576,7 @@ public class EthJsonRpcImpl implements JsonRpc {
     }
 
 
+    @Override
     public String eth_sendTransaction(CallArguments args) throws Exception {
         Account account = getAccountFromKeystore(jsonHexToHex(args.from));
 
@@ -584,6 +607,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return TypeConverter.toJsonHex(tx.getHash());
     }
 
+    @Override
     public String eth_sendRawTransaction(String rawData) throws Exception {
         Transaction tx = new Transaction(hexToByteArray(rawData));
 
@@ -649,6 +673,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         }
     }
 
+    @Override
     public String eth_call(CallArguments args, String bnOrId) throws Exception {
         TransactionReceipt res;
         if ("pending".equals(bnOrId)) {
@@ -660,6 +685,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return TypeConverter.toJsonHex(res.getExecutionResult());
     }
 
+    @Override
     public String eth_estimateGas(CallArguments args) throws Exception {
         TransactionReceipt res = createCallTxAndExecute(args, blockchain.getBestBlock());
         return TypeConverter.toJsonHex(res.getGasUsed());
@@ -711,11 +737,13 @@ public class EthJsonRpcImpl implements JsonRpc {
         return br;
     }
 
+    @Override
     public BlockResult eth_getBlockByHash(String blockHash, Boolean fullTransactionObjects) throws Exception {
         final Block b = getBlockByJSonHash(blockHash);
         return getBlockResult(b, fullTransactionObjects);
     }
 
+    @Override
     public BlockResult eth_getBlockByNumber(String bnOrId, Boolean fullTransactionObjects) throws Exception {
         final Block b;
         if ("pending".equalsIgnoreCase(bnOrId)) {
@@ -726,6 +754,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return (b == null ? null : getBlockResult(b, fullTransactionObjects));
     }
 
+    @Override
     public TransactionResultDTO eth_getTransactionByHash(String transactionHash) throws Exception {
         final byte[] txHash = hexToByteArray(transactionHash);
 
@@ -745,6 +774,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return new TransactionResultDTO(block, txInfo.getIndex(), txInfo.getReceipt().getTransaction());
     }
 
+    @Override
     public TransactionResultDTO eth_getTransactionByBlockHashAndIndex(String blockHash, String index) throws Exception {
         Block b = getBlockByJSonHash(blockHash);
         if (b == null) return null;
@@ -754,6 +784,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return new TransactionResultDTO(b, idx, tx);
     }
 
+    @Override
     public TransactionResultDTO eth_getTransactionByBlockNumberAndIndex(String bnOrId, String index) throws Exception {
         Block b = getByJsonBlockId(bnOrId);
         List<Transaction> txs = getTransactionsByJsonBlockId(bnOrId);
@@ -764,6 +795,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return new TransactionResultDTO(b, idx, tx);
     }
 
+    @Override
     public TransactionReceiptDTO eth_getTransactionReceipt(String transactionHash) throws Exception {
         final byte[] hash = TypeConverter.hexToByteArray(transactionHash);
 
@@ -932,6 +964,7 @@ public class EthJsonRpcImpl implements JsonRpc {
             }
         }
 
+        @Override
         public void newBlockReceived(Block b) {
             add(new NewBlockFilterEvent(b));
         }
@@ -949,6 +982,7 @@ public class EthJsonRpcImpl implements JsonRpc {
             }
         }
 
+        @Override
         public void newPendingTx(Transaction tx) {
             add(new PendingTransactionFilterEvent(tx));
         }
@@ -1518,6 +1552,7 @@ public class EthJsonRpcImpl implements JsonRpc {
         return toJsonHex(account.getAddress());
     }
 
+    @Override
     public String personal_importRawKey(String keydata, String passphrase) {
         log.debug("personal_importRawKey(...)");
         Objects.requireNonNull(keydata, "keydata is required");
