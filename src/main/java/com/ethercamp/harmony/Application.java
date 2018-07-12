@@ -19,6 +19,7 @@
 package com.ethercamp.harmony;
 
 import com.ethercamp.harmony.config.EthereumHarmonyConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.ethereum.Start;
 import org.ethereum.config.SystemProperties;
 import org.ethereum.facade.Ethereum;
@@ -51,6 +52,7 @@ import static java.util.Arrays.asList;
 @SpringBootApplication
 @EnableScheduling
 @Import({EthereumHarmonyConfig.class})
+@Slf4j(topic = "Application")
 public class Application {
 
     /**

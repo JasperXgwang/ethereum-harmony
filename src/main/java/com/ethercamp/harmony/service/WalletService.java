@@ -252,6 +252,7 @@ public class WalletService {
     }
 
     public WalletInfoDTO getWalletInfo() {
+        log.info("exec getWalletInfo srv");
         BigInteger gasPrice = BigInteger.valueOf(ethereum.getGasPrice());
         BigInteger txFee = gasLimit.multiply(gasPrice);
 

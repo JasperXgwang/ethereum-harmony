@@ -259,10 +259,9 @@ public class BlockchainInfoService implements ApplicationListener {
 
             final String ANSI_RESET = "\u001B[0m";
             final String ANSI_BLUE = "\u001B[34m";
-            System.out.println("EthereumJ database dir location: " + systemProperties.databaseDir());
-            System.out.println("EthereumJ keystore dir location: " + keystore.getKeyStoreLocation());
-            System.out.println(ANSI_BLUE + "Server started at http://localhost:" + serverPort + "" + ANSI_RESET);
-
+            log.info("EthereumJ database dir location: " + systemProperties.databaseDir());
+            log.info("EthereumJ keystore dir location: " + keystore.getKeyStoreLocation());
+            log.info(ANSI_BLUE + "Server started at http://localhost:" + serverPort + "" + ANSI_RESET);
             if (!config.getConfig().hasPath("logs.keepStdOut") || !config.getConfig().getBoolean("logs.keepStdOut")) {
                 createLogAppenderForMessaging();
             }

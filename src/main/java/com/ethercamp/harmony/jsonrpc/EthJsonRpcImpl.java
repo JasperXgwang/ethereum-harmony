@@ -471,7 +471,8 @@ public class EthJsonRpcImpl implements JsonRpc {
 
         byte[] addressAsByteArray = TypeConverter.hexToByteArray(address);
         BigInteger balance = getRepoByJsonBlockId(blockId).getBalance(addressAsByteArray);
-        return TypeConverter.toJsonHex(balance);
+//        return TypeConverter.toJsonHex(balance);
+        return balance.toString();
     }
 
     @Override

@@ -79,6 +79,12 @@ repositories {
 }
 
 dependencies {
+// tag::jetty[]
+//    compile("org.springframework.boot:spring-boot-starter-web") {
+//        exclude module: "spring-boot-starter-tomcat"
+//    }
+//    compile("org.springframework.boot:spring-boot-starter-jetty")
+
     if (JavaVersion.current().ordinal() > 7) { // Java 9+ compatibility
         compile 'javax.xml.bind:jaxb-api:2.2.11'
         compile 'com.sun.xml.bind:jaxb-core:2.2.11'

@@ -70,6 +70,27 @@ public class FileSystemKeystore implements Keystore {
         final File keysFolder = getKeyStoreLocation().toFile();
         keysFolder.mkdirs();
 
+//        {
+//            "crypto": {
+//            "cipher": "aes-128-ctr",
+//                    "ciphertext": "324b674314d5a5f5a8526a411907f72a55370730a69417a72a78cf1ac8350efc",
+//                    "kdf": "scrypt",
+//                    "mac": "14ddd9438febc3887a5a8498440ce28ee971257398fc0c5380bacad830f0246f",
+//                    "cipherparams": {
+//                "iv": "9b5470d349933f5246245a8f70111b53"
+//            },
+//            "kdfparams": {
+//                "dklen": 32,
+//                        "salt": "ef43ac84adcd337b2f85aa4cdce56a7491a8a42d8b889ebbbc36919873040e1f",
+//                        "n": 262144,
+//                        "p": 1,
+//                        "r": 8
+//            }
+//        },
+//            "id": "c2b17d23-068e-42be-bc5e-2cb5a385c530",
+//                "version": 3,
+//                "address": "78ca375111f04c94374285a80d68318785b66619"
+//        }
         String content = keystoreFormat.toKeystore(key, password);
         storeRawKeystore(content, address);
     }

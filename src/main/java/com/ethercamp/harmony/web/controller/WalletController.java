@@ -21,9 +21,13 @@ package com.ethercamp.harmony.web.controller;
 import com.ethercamp.harmony.model.dto.WalletInfoDTO;
 import com.ethercamp.harmony.service.WalletService;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -31,13 +35,16 @@ import java.util.List;
  * Created by Stan Reshetnyk on 26.08.16.
  */
 @RestController
+@Slf4j(topic = "WalletController")
 public class WalletController {
+
 
     @Autowired
     WalletService walletService;
 
     @MessageMapping("/getWalletInfo")
     public WalletInfoDTO getWalletInfo() {
+        log.error("getWalletInfo exe");
         return walletService.getWalletInfo();
     }
 
@@ -56,7 +63,7 @@ public class WalletController {
         walletService.removeAddress(data.value);
     }
 
-//    @MessageMapping("/generateWords")
+    //    @MessageMapping("/generateWords")
     @RequestMapping(value = "/wallet/generateWords", method = RequestMethod.GET)
     public List<String> generateWords(@RequestParam Integer wordsCount) {
         return walletService.generateWords(wordsCount);
@@ -68,7 +75,7 @@ public class WalletController {
     @Data
     public static class StringValueDTO {
 
-         public String value;
+        public String value;
     }
 
     /**
@@ -91,5 +98,9 @@ public class WalletController {
         private String secret;
 
         private String name;
+    }
+
+    public static void main(String[] args) {
+        log.info("xxxxxx");
     }
 }
